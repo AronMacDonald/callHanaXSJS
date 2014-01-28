@@ -1,4 +1,3 @@
-
 The generic program calls a HANA Server Side Java Script, which can be called from HADOOP.
 
 see following for example:
@@ -11,4 +10,5 @@ arg[1]  - HANA User name
 arg[2]  - HANA Password
 arg[3]  - HADOOP HDFS Output directory for storing response
 arg[4 to n] - are used for the input parameters for the HANA XSJS called
+
 
