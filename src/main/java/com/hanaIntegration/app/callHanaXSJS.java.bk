@@ -1,0 +1,40 @@
+package com.hanaIntegration.app;
+
+/**
+ * Calls a HANA serverside javascript (xsjs)
+ *  INPUTS: (mandatory) HANA XSJS URL, output logfile name, username & password 
+ *          (optional) n parameters/arguments
+ *  OUTPUT: writes HANA XSJS response to a the logfile on HDFS 
+ *
+ */
+
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import org.apache.commons.io.IOUtils;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FSDataOutputStream;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+
+public class callHanaXSJS 
+{
+	public static void main(String[] args) throws IOException 
+    {
+        //System.out.println( "Hello World!" );
+        URL url = new URL("http://earthquake.usgs.gov/earthquakes/feed/csv/2.5/month");
+        HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+        conn.connect();
+        InputStream connStream = conn.getInputStream();
+
+        FileSystem hdfs = FileSystem.get(new Configuration());
+        FSDataOutputStream outStream = hdfs.create(new Path(args[0], "HANAxsjsResponse.txt"));
+        IOUtils.copy(connStream, outStream);
+
+        outStream.close();
+        connStream.close();
+        conn.disconnect();
+    }
+}
